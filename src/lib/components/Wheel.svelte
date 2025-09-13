@@ -10,6 +10,12 @@
   let spinVelocity = $state(0);
   let spinTimeout: number;
 
+  const size = 350;
+  const center = size / 2;
+  const radius = size / 2;
+  const textRadius = radius * 0.72; // 180/250
+  const pointerY = size * 0.08; // 20/250
+
   onMount(() => {
     context = canvas.getContext('2d')!;
     drawWheel();
@@ -28,21 +34,22 @@
     context.clearRect(0, 0, canvas.width, canvas.height);
     context.strokeStyle = '#333';
     context.lineWidth = 2;
+    context.font = '16px sans-serif';
 
     for (let i = 0; i < numOptions; i++) {
       const angle = spinAngle + i * arcSize;
       context.fillStyle = getFillStyle(i);
 
       context.beginPath();
-      context.arc(250, 250, 250, angle, angle + arcSize);
-      context.lineTo(250, 250);
+      context.arc(center, center, radius, angle, angle + arcSize);
+      context.lineTo(center, center);
       context.fill();
 
       context.save();
       context.fillStyle = 'white';
       context.translate(
-        250 + Math.cos(angle + arcSize / 2) * 180,
-        250 + Math.sin(angle + arcSize / 2) * 180
+        center + Math.cos(angle + arcSize / 2) * textRadius,
+        center + Math.sin(angle + arcSize / 2) * textRadius
       );
       context.rotate(angle + arcSize / 2 + Math.PI / 2);
       context.fillText(
@@ -59,10 +66,10 @@
     return `hsl(${hue}, 50%, 60%)`;
   }
 
-  function hslToHex(h, s, l) {
+  function hslToHex(h: number, s: number, l: number) {
     l /= 100;
     const a = (s * Math.min(l, 1 - l)) / 100;
-    const f = (n) => {
+    const f = (n: number) => {
       const k = (n + h / 30) % 12;
       const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
       return Math.round(255 * color)
@@ -81,8 +88,7 @@
     if (spinVelocity > 0.001) {
       spinTimeout = setTimeout(spin, 10);
     } else {
-      const pointerX = 250;
-      const pointerY = 20;
+      const pointerX = center;
       const pixel = context.getImageData(pointerX, pointerY, 1, 1).data;
       const color =
         '#' +
@@ -105,16 +111,22 @@
   }
 </script>
 
-<div class="wheel-container">
-  <div class="arrow"></div>
-  <canvas bind:this={canvas} width="500" height="500"></canvas>
+<div class="wrapper">
+  <div class="wheel-container" style="width: {size}px; height: {size}px;">
+    <div class="arrow"></div>
+    <canvas bind:this={canvas} width={size} height={size}></canvas>
+  </div>
 </div>
 
 <style>
+  .wrapper {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+
   .wheel-container {
     position: relative;
-    width: 500px;
-    height: 500px;
   }
 
   .arrow {
