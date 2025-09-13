@@ -10,7 +10,7 @@
   let spinVelocity = $state(0);
   let spinTimeout: number;
 
-  const size = 350;
+  const size = 330;
   const center = size / 2;
   const radius = size / 2;
   const textRadius = radius * 0.72; // 180/250

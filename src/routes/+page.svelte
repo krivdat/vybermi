@@ -48,33 +48,33 @@
   role="button"
   tabindex="0"
 >
-  <h1 class="title">Decision Maker</h1>
+  <h1 class="title">Vyber za mňa!</h1>
 
   {#if spinning || selectedOption}
     <Wheel {options} on:spinend={onSpinEnd} />
     {#if selectedOption}
       <div class="result">
-        <h2>The winner is:</h2>
+        <h2>Vybral som:</h2>
         <p class="winner">{selectedOption}</p>
       </div>
     {/if}
   {:else}
     <div class="options">
-      <h2>Enter your options</h2>
+      <h2>Zadaj možnosti</h2>
       <div class="input-group">
         <input
           type="text"
           bind:value={newOption}
           onkeydown={(e) => e.key === 'Enter' && addOption()}
-          placeholder="Add an option"
+          placeholder="Pridaj možnosť"
         />
-        <button onclick={addOption}>Add</button>
+        <button onclick={addOption}>Pridaj</button>
       </div>
       <ul>
         {#each options as option, index}
           <li>
             {option}
-            <button onclick={() => removeOption(index)}>Remove</button>
+            <button onclick={() => removeOption(index)}>Zmaž</button>
           </li>
         {/each}
       </ul>
@@ -83,7 +83,7 @@
         onclick={startSpin}
         disabled={options.length < 2}
       >
-        Spin the wheel
+        Roztoč koleso
       </button>
     </div>
   {/if}
